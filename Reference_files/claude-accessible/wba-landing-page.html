@@ -70,6 +70,13 @@
             letter-spacing: 0.5px;
         }
 
+        /* Custom Property for Gradient Angle Animation */
+        @property --gradient-angle {
+            syntax: "<angle>";
+            initial-value: 0deg;
+            inherits: false;
+        }
+
         .cta-header {
             position: relative;
             color: var(--pure-white);
@@ -78,36 +85,53 @@
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
-            overflow: hidden;
             background: var(--indispensable-red);
+            z-index: 1;
         }
 
         .cta-header::before {
-            content: '';
+            content: "";
             position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            background: conic-gradient(from 0deg, 
-                #64a5bf 0deg, 
-                #c14955 25%, 
-                #284c6f 50%, 
-                #64a5bf 75%, 
-                #c14955 100%);
-            border-radius: 12px;
+            inset: -4px;
+            z-index: -2;
+            background: conic-gradient(
+                from var(--gradient-angle),
+                var(--transformation-teal),
+                var(--indispensable-red),
+                var(--blueprint-blue),
+                var(--transformation-teal),
+                var(--indispensable-red),
+                var(--transformation-teal)
+            );
+            border-radius: calc(8px + 4px);
+            animation: rotation-glow 8s linear infinite;
+            box-shadow: 0 0 12px rgba(100, 165, 191, 0.4), 0 0 24px rgba(193, 73, 85, 0.3);
+            filter: blur(1rem);
+            opacity: .5;
+        }
+
+        .cta-header::after {
+            content: "";
+            position: absolute;
+            inset: 0;
             z-index: -1;
-            animation: rotate-gradient 3s linear infinite;
+            background: var(--indispensable-red);
+            border-radius: 8px;
         }
 
         .cta-header:hover {
+            background: #a83e48;
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(193, 73, 85, 0.4);
         }
 
-        @keyframes rotate-gradient {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes rotation-glow {
+            0% {
+                --gradient-angle: 0deg;
+            }
+            100% {
+                --gradient-angle: 360deg;
+            }
         }
 
         /* Hero Section */
@@ -421,29 +445,20 @@
 
         /* Video Section */
         .video-section {
-            padding: 60px 0;
+            padding: 40px 0;
             background: var(--canvas-white);
-            text-align: center;
-        }
-
-        .video-intro {
-            font-size: 1.1rem;
-            color: var(--blueprint-blue);
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .video-container {
             position: relative;
-            padding-bottom: 45%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
             height: 0;
             overflow: hidden;
-            border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(27, 38, 62, 0.2);
-            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(27, 38, 62, 0.15);
+            max-width: 800px;
             margin: 0 auto;
+            background: #000;
         }
 
         .video-container iframe {
@@ -802,12 +817,20 @@
                 width: 100%;
             }
             
+            .bridge-content {
+                padding: 2rem;
+            }
+            
             .bridge-content h3 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
             
             .bridge-content p {
                 font-size: 1.1rem;
+            }
+            
+            .video-section {
+                padding: 30px 0;
             }
             
             .frameworks-list li {
@@ -983,23 +1006,19 @@
     </section>
 
     <!-- Video Section -->
-<section class="video-section">
-  <div class="container">
-    <h2 class="section-title reveal">See How It Works</h2>
-    <p class="video-intro reveal">
-      An 8-minute overview of the frameworks that transform tactical marketers into strategic brand architects
-    </p>
-    <div class="video-container reveal">
-      <iframe
-        src="https://share.descript.com/embed/nvswKxxZzxn?hideUI=true&hideInfo=true&showControls=false&autoplay=0"
-        frameborder="0"
-        allowfullscreen
-        allow="autoplay; fullscreen"
-        title="Overview video"
-      ></iframe>
-    </div>
-  </div>
-</section>
+    <section class="video-section">
+        <div class="container">
+            <div class="video-container reveal">
+                <iframe
+                    src="https://share.descript.com/embed/nvswKxxZzxn?hideUI=true&hideInfo=true&showControls=false&autoplay=0"
+                    frameborder="0"
+                    allowfullscreen
+                    allow="autoplay; fullscreen"
+                    title="WBA Framework Overview"
+                ></iframe>
+            </div>
+        </div>
+    </section>
     <!-- Three Step Plan -->
     <section class="three-step">
         <div class="container">
