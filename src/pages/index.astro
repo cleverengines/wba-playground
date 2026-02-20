@@ -1,0 +1,195 @@
+---
+import "../styles/global.css";
+import { modules, sections } from "../data/modules";
+
+const sectionBadgeColors: Record<number, string> = {
+  1: "bg-wba-blue text-white",
+  2: "bg-wba-teal text-white",
+  3: "bg-wba-red text-white",
+};
+
+const sectionModuleCounts = sections.map((s) => ({
+  ...s,
+  count: modules.filter((m) => m.section === s.n).length,
+}));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whole Brand Academy — Course Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="bg-wba-canvas min-h-screen">
+    <!-- Header -->
+    <header class="bg-wba-deep text-white py-8 px-4">
+      <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-4 md:gap-8">
+        <img src="/logos/wba-logo-draft.svg" alt="Whole Brand Academy" class="h-14" />
+        <div class="text-center md:text-left">
+          <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Whole Brand Academy</h1>
+          <p class="text-wba-teal mt-1 text-sm md:text-base">A practical course in brand strategy using Whole Brain Thinking</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8">
+      <!-- Overall progress -->
+      <section class="bg-white rounded-xl shadow-sm p-5 mb-8">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-semibold text-wba-deep text-lg">Your Progress</h2>
+          <span id="progress-label" class="text-sm font-medium text-wba-blue">0 of 20 modules complete</span>
+        </div>
+        <div class="w-full bg-wba-canvas rounded-full h-3 overflow-hidden">
+          <div id="progress-bar" class="h-3 bg-wba-teal rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+        <p id="progress-pct" class="text-xs text-gray-400 mt-1 text-right">0% complete</p>
+      </section>
+
+      <!-- Section cards -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        {sectionModuleCounts.map((section) => (
+          <div
+            class="bg-white rounded-xl shadow-sm p-5 border-t-4"
+            style={`border-color: ${section.n === 1 ? '#284c6f' : section.n === 2 ? '#64a5bf' : '#c14955'}`}
+            data-section={section.n}
+          >
+            <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Section {section.n}</p>
+            <h3 class="font-bold text-wba-deep text-lg mb-3">{section.title}</h3>
+            <div class="flex items-end justify-between">
+              <span class="text-sm text-gray-500">
+                <span class="section-complete font-bold text-wba-deep text-xl" data-section={section.n}>0</span>
+                <span> / {section.count} modules</span>
+              </span>
+              <div class="w-20 bg-wba-canvas rounded-full h-2">
+                <div
+                  class="section-bar h-2 rounded-full transition-all duration-500"
+                  data-section={section.n}
+                  data-total={section.count}
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <!-- Module grid -->
+      <section>
+        <h2 class="text-xl font-bold text-wba-deep mb-5">All Modules</h2>
+
+        {sections.map((section) => {
+          const sectionMods = modules.filter((m) => m.section === section.n);
+          return (
+            <div class="mb-8">
+              <div class="flex items-center gap-3 mb-4">
+                <span
+                  class="text-xs font-semibold uppercase tracking-widest px-2.5 py-1 rounded-full"
+                  style={`background-color: ${section.n === 1 ? '#284c6f' : section.n === 2 ? '#64a5bf' : '#c14955'}; color: white`}
+                >
+                  Section {section.n}
+                </span>
+                <h3 class="font-semibold text-wba-deep">{section.title}</h3>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {sectionMods.map((mod) => (
+                  <a
+                    href={`/lessons/${mod.slug}`}
+                    data-module={mod.n}
+                    class="module-card group bg-white rounded-xl shadow-sm hover:shadow-md border border-transparent hover:border-wba-teal transition-all duration-200 p-4 flex items-start gap-3"
+                  >
+                    <div class="module-num-badge shrink-0 w-9 h-9 rounded-full bg-wba-canvas flex items-center justify-center text-sm font-bold text-wba-blue group-hover:bg-wba-teal group-hover:text-white transition-colors">
+                      {mod.n}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-semibold text-wba-deep leading-tight group-hover:text-wba-blue transition-colors">
+                        {mod.title}
+                      </p>
+                      <p class="text-xs text-gray-400 mt-1">Module {mod.n}</p>
+                    </div>
+                    <div class="module-tick shrink-0 hidden text-green-500 mt-0.5">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </section>
+    </main>
+
+    <footer class="bg-wba-deep text-white/50 text-center text-xs py-6 mt-12">
+      <p>© {new Date().getFullYear()} Whole Brand Academy. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const STORAGE_KEY = "wba_progress";
+
+      function getProgress(): number[] {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        } catch {
+          return [];
+        }
+      }
+
+      function updateDashboard() {
+        const progress = getProgress();
+        const total = 20;
+        const count = progress.length;
+        const pct = Math.round((count / total) * 100);
+
+        const label = document.getElementById("progress-label");
+        const bar = document.getElementById("progress-bar");
+        const pctEl = document.getElementById("progress-pct");
+
+        if (label) label.textContent = `${count} of ${total} modules complete`;
+        if (bar) bar.style.width = `${pct}%`;
+        if (pctEl) pctEl.textContent = `${pct}% complete`;
+
+        // Update section bars
+        [1, 2, 3].forEach((sectionNum) => {
+          const sectionMods: Record<number, number[]> = {
+            1: [1, 2, 3, 4, 5, 6],
+            2: [7, 8, 9, 10, 11],
+            3: [12, 13, 14, 15, 16, 17, 18, 19, 20],
+          };
+          const mods = sectionMods[sectionNum];
+          const done = mods.filter((n) => progress.includes(n)).length;
+          const total = mods.length;
+
+          const completeEl = document.querySelector(`.section-complete[data-section="${sectionNum}"]`);
+          const barEl = document.querySelector(`.section-bar[data-section="${sectionNum}"]`) as HTMLElement | null;
+
+          if (completeEl) completeEl.textContent = String(done);
+          if (barEl) {
+            barEl.style.width = `${Math.round((done / total) * 100)}%`;
+            barEl.style.backgroundColor = sectionNum === 1 ? '#284c6f' : sectionNum === 2 ? '#64a5bf' : '#c14955';
+          }
+        });
+
+        // Update module card ticks
+        const cards = document.querySelectorAll(".module-card");
+        cards.forEach((card) => {
+          const modNum = parseInt(card.getAttribute("data-module") || "0");
+          const tick = card.querySelector(".module-tick");
+          const numBadge = card.querySelector(".module-num-badge");
+          if (progress.includes(modNum)) {
+            tick?.classList.remove("hidden");
+            numBadge?.classList.add("!bg-green-100", "!text-green-600");
+          } else {
+            tick?.classList.add("hidden");
+            numBadge?.classList.remove("!bg-green-100", "!text-green-600");
+          }
+        });
+      }
+
+      window.addEventListener("storage", updateDashboard);
+      updateDashboard();
+    </script>
+  </body>
+</html>
