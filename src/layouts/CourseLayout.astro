@@ -30,12 +30,13 @@ const sectionColourMap: Record<number, string> = {
   </head>
   <body class="bg-[#f7f6f4]">
     <!-- Top Nav -->
-    <header class="bg-wba-deep text-white h-14 flex items-center px-4 fixed top-0 left-0 right-0 z-50 shadow-md">
+    <header class="bg-wba-deep text-white h-14 flex items-center gap-3 px-4 pr-4 fixed top-0 left-0 right-0 z-50 shadow-md">
       <a href="/" class="flex items-center gap-2 shrink-0">
         <img src="/logos/wba-logo-draft.svg" alt="Whole Brand Academy" class="h-8 brightness-0 invert" />
       </a>
-      <a href="/" class="hidden md:block mx-auto text-sm font-medium text-wba-teal hover:text-white transition-colors">
-        ← Back to Dashboard
+      <a href="/" class="text-sm font-medium text-wba-teal hover:text-white transition-colors shrink-0">
+        <span class="hidden md:inline">← Back to Dashboard</span>
+        <span class="md:hidden">← Dashboard</span>
       </a>
       <div id="nav-progress" class="ml-auto text-sm text-white/70 shrink-0">
         <span id="progress-text">0 / 20 complete</span>
@@ -43,7 +44,7 @@ const sectionColourMap: Record<number, string> = {
       <!-- Mobile menu button -->
       <button
         id="sidebar-toggle"
-        class="ml-3 md:hidden p-2 rounded text-white/80 hover:text-white hover:bg-wba-blue transition-colors"
+        class="ml-1 md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded text-white/80 hover:text-white hover:bg-wba-blue transition-colors shrink-0"
         aria-label="Toggle course menu"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
