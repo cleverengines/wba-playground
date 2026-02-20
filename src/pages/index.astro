@@ -126,6 +126,10 @@ const sectionModuleCounts = sections.map((s) => ({
                         {mod.title}
                       </p>
                       <p class="text-sm text-gray-500 mt-1.5 line-clamp-2">{mod.desc}</p>
+                      <p class="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        {mod.duration}
+                      </p>
                     </div>
                     {/* Arrow on hover */}
                     <span class="mt-auto pt-3 text-wba-teal text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 self-end">→</span>
