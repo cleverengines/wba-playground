@@ -9,10 +9,11 @@ interface Props {
 
 const { currentModule, title } = Astro.props;
 
-const sectionColors: Record<number, string> = {
-  1: "bg-blue-900",
-  2: "bg-blue-800",
-  3: "bg-blue-700",
+const currentMod = modules.find((m) => m.n === currentModule);
+const sectionColourMap: Record<number, string> = {
+  1: "#284c6f",
+  2: "#64a5bf",
+  3: "#c14955",
 };
 ---
 
@@ -23,8 +24,11 @@ const sectionColors: Record<number, string> = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} — Whole Brand Academy</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-wba-canvas">
+  <body class="bg-[#f7f6f4]">
     <!-- Top Nav -->
     <header class="bg-wba-deep text-white h-14 flex items-center px-4 fixed top-0 left-0 right-0 z-50 shadow-md">
       <a href="/" class="flex items-center gap-2 shrink-0">
@@ -51,8 +55,8 @@ const sectionColors: Record<number, string> = {
     </header>
 
     <!-- Progress bar under nav -->
-    <div class="fixed top-14 left-0 right-0 z-40 h-1 bg-wba-blue">
-      <div id="progress-bar" class="h-full bg-wba-teal transition-all duration-300" style="width: 0%"></div>
+    <div class="fixed top-14 left-0 right-0 z-40 h-1 bg-wba-blue/30">
+      <div id="progress-bar" class="h-full bg-wba-teal rounded-r-full transition-all duration-300" style="width: 0%"></div>
     </div>
 
     <!-- Layout grid: sidebar + content -->
@@ -71,10 +75,11 @@ const sectionColors: Record<number, string> = {
         <nav class="py-4">
           {sections.map((section) => {
             const sectionModules = modules.filter((m) => m.section === section.n);
+            const sectionColour = sectionColourMap[section.n];
             return (
               <div class="mb-2">
-                <p class="px-4 py-2 text-xs font-semibold uppercase tracking-widest text-wba-teal">
-                  Section {section.n}: {section.title}
+                <p class="px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-wba-teal">
+                  {section.title}
                 </p>
                 <ul>
                   {sectionModules.map((mod) => (
@@ -82,17 +87,17 @@ const sectionColors: Record<number, string> = {
                       <a
                         href={`/lessons/${mod.slug}`}
                         data-module={mod.n}
-                        class={`sidebar-link flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-wba-blue ${
+                        class={`sidebar-link flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-wba-blue/20 ${
                           mod.n === currentModule
-                            ? "bg-wba-teal text-white font-semibold current-module"
-                            : "text-white/80 hover:text-white"
+                            ? "border-l-[3px] border-wba-teal bg-wba-blue/25 text-white font-semibold current-module"
+                            : "text-white/70 hover:text-white border-l-[3px] border-transparent"
                         }`}
                       >
-                        <span class="flex items-center justify-center w-6 h-6 rounded-full bg-white/10 text-xs font-mono shrink-0 module-num">
+                        <span class="flex items-center justify-center w-5 h-5 rounded-full bg-white/10 text-[10px] font-mono shrink-0 module-num">
                           {mod.n}
                         </span>
-                        <span class="leading-tight">{mod.title}</span>
-                        <span class="ml-auto shrink-0 tick-icon hidden text-green-400">
+                        <span class="leading-tight text-[13px]">{mod.title}</span>
+                        <span class="ml-auto shrink-0 tick-icon hidden text-wba-teal">
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                             <polyline points="20 6 9 17 4 12"/>
                           </svg>
@@ -108,7 +113,7 @@ const sectionColors: Record<number, string> = {
       </aside>
 
       <!-- Main content -->
-      <main class="flex-1 md:ml-72 min-h-[calc(100vh-60px)]">
+      <main class="flex-1 md:ml-72 min-h-[calc(100vh-60px)] bg-white">
         <div class="max-w-4xl mx-auto px-4 py-8">
           <slot />
         </div>
@@ -148,10 +153,10 @@ const sectionColors: Record<number, string> = {
           const numBadge = link.querySelector(".module-num");
           if (progress.includes(modNum)) {
             tick?.classList.remove("hidden");
-            numBadge?.classList.add("opacity-50");
+            if (numBadge) numBadge.classList.add("hidden");
           } else {
             tick?.classList.add("hidden");
-            numBadge?.classList.remove("opacity-50");
+            if (numBadge) numBadge.classList.remove("hidden");
           }
         });
       }
