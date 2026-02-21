@@ -1,0 +1,116 @@
+---
+import "../../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whole Brand Scan — Whole Brand Academy</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#f7f6f4] min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-wba-deep text-white py-6 px-4">
+      <div class="max-w-5xl mx-auto flex items-center gap-4">
+        <img src="/logos/wba-logo-draft.svg" alt="Whole Brand Academy" class="h-10 brightness-0 invert" />
+        <p class="text-wba-canvas text-sm md:text-base font-medium">Whole Brand Academy</p>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <main class="flex-1 px-4 py-12">
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-10">
+          <h1 class="text-3xl md:text-4xl font-bold text-wba-deep mb-4">Your Whole Brand Scan</h1>
+          <p class="text-lg text-gray-600 leading-relaxed">
+            Most founder-led brands have 2–3 strong zones and 5–6 vague ones. In 3 minutes, find out exactly where yours stands.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <h2 class="font-bold text-wba-deep text-lg mb-4">What you'll get</h2>
+          <ul class="space-y-3 text-gray-600 text-sm">
+            <li class="flex items-start gap-3">
+              <span class="text-wba-teal font-bold mt-0.5">&#10003;</span>
+              <span>A visual <strong>Brand-on-a-Page</strong> showing your strengths and gaps across all four thinking zones</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-wba-teal font-bold mt-0.5">&#10003;</span>
+              <span>An AI-generated <strong>Brand Promise</strong> — the potential DNA of your brand in 3–6 words</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-wba-teal font-bold mt-0.5">&#10003;</span>
+              <span>A <strong>gap analysis</strong> with honest, specific insight on what's costing you the most</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Intake form -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+          <h2 class="font-bold text-wba-deep text-lg mb-4">Let's start</h2>
+          <form id="intake-form" class="space-y-4">
+            <div>
+              <label for="firstName" class="block text-sm font-medium text-wba-deep mb-1">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                required
+                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
+                placeholder="e.g. Sarah"
+              />
+            </div>
+            <div>
+              <label for="businessName" class="block text-sm font-medium text-wba-deep mb-1">Business Name</label>
+              <input
+                type="text"
+                id="businessName"
+                name="businessName"
+                required
+                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
+                placeholder="e.g. Acme Studios"
+              />
+            </div>
+            <div>
+              <label for="role" class="block text-sm font-medium text-wba-deep mb-1">Your Role</label>
+              <input
+                type="text"
+                id="role"
+                name="role"
+                required
+                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
+                placeholder="e.g. Founder, Marketing Director"
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full bg-wba-deep text-white font-semibold py-3 px-6 rounded-lg hover:bg-wba-blue transition-colors text-base"
+            >
+              Start the Scan &rarr;
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const form = document.getElementById('intake-form') as HTMLFormElement;
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const firstName = (document.getElementById('firstName') as HTMLInputElement).value.trim();
+        const businessName = (document.getElementById('businessName') as HTMLInputElement).value.trim();
+        const role = (document.getElementById('role') as HTMLInputElement).value.trim();
+
+        if (!firstName || !businessName || !role) return;
+
+        sessionStorage.setItem('wba_scan_intake', JSON.stringify({ firstName, businessName, role }));
+        window.location.href = '/scan/quiz';
+      });
+    </script>
+  </body>
+</html>

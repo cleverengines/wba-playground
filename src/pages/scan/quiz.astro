@@ -1,0 +1,276 @@
+---
+import "../../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whole Brand Scan — Quiz</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#f7f6f4] min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-wba-deep text-white py-4 px-4">
+      <div class="max-w-3xl mx-auto flex items-center gap-4">
+        <img src="/logos/wba-logo-draft.svg" alt="Whole Brand Academy" class="h-8 brightness-0 invert" />
+        <span class="text-sm font-medium text-wba-canvas">Whole Brand Scan</span>
+      </div>
+    </header>
+
+    <!-- Progress bar -->
+    <div class="bg-gray-200 h-2">
+      <div id="progress-bar" class="h-2 bg-wba-teal transition-all duration-300 rounded-r-full" style="width: 0%"></div>
+    </div>
+
+    <!-- Quiz container -->
+    <main class="flex-1 px-4 py-8">
+      <div class="max-w-2xl mx-auto">
+        <!-- Progress text -->
+        <p id="progress-text" class="text-sm text-gray-500 mb-6 text-center">Question 1 of 8</p>
+
+        <!-- Question area -->
+        <div id="question-area">
+          <p id="question-label" class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2"></p>
+          <h2 id="question-text" class="text-xl md:text-2xl font-bold text-wba-deep mb-6 leading-snug"></h2>
+          <div id="options-container" class="space-y-3"></div>
+        </div>
+
+        <!-- Loading state (hidden by default) -->
+        <div id="loading-state" class="hidden text-center py-20">
+          <div class="inline-block w-10 h-10 border-4 border-wba-teal border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p class="text-lg font-semibold text-wba-deep">Generating your Whole Brand Scan Report...</p>
+          <p class="text-sm text-gray-500 mt-2">This usually takes 10–15 seconds</p>
+        </div>
+
+        <!-- Navigation -->
+        <div id="nav-buttons" class="flex items-center justify-between mt-8">
+          <button
+            id="back-btn"
+            class="hidden text-sm font-medium text-gray-500 hover:text-wba-deep transition-colors px-4 py-2"
+          >
+            &larr; Back
+          </button>
+          <div class="flex-1"></div>
+          <button
+            id="next-btn"
+            disabled
+            class="bg-wba-deep text-white font-semibold py-3 px-8 rounded-lg hover:bg-wba-blue transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Next &rarr;
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const questions = [
+        {
+          index: 0, label: 'CREDIBILITY & PROOF', zone: 'blue',
+          question: 'If a potential client googled you right now, what would they find that builds trust?',
+          options: [
+            { text: 'Strong evidence — testimonials, case studies, credentials, clear track record', score: 3 },
+            { text: 'Some social proof, but it\u2019s patchy or hard to find', score: 2 },
+            { text: 'Not much — we rely on word of mouth or personal referrals', score: 1 }
+          ]
+        },
+        {
+          index: 1, label: 'DELIVERY & CONSISTENCY', zone: 'green',
+          question: 'How consistent is the experience of working with you — from first contact to ongoing delivery?',
+          options: [
+            { text: 'Very consistent — we have a clear, repeatable process everyone follows', score: 3 },
+            { text: 'Generally consistent, but it depends on who the client deals with', score: 2 },
+            { text: 'Varies a lot — we figure it out as we go', score: 1 }
+          ]
+        },
+        {
+          index: 2, label: 'DIFFERENTIATION & FUTURE', zone: 'yellow',
+          question: 'What do you offer that a direct competitor genuinely cannot replicate?',
+          options: [
+            { text: 'Something specific — unique IP, methodology, or an approach that\'s truly ours', score: 3 },
+            { text: 'We\'re better in some ways, but it\'s hard to articulate clearly', score: 2 },
+            { text: 'Honestly, not much — we compete on quality or price like everyone else', score: 1 }
+          ]
+        },
+        {
+          index: 3, label: 'PERSONALITY & VOICE', zone: 'red',
+          question: 'If your brand were a person at a dinner party, how would guests describe them to someone who hadn\'t met them?',
+          options: [
+            { text: 'Immediately and consistently — our personality is clear and shows up everywhere', score: 3 },
+            { text: 'Sort of — but different team members would describe us differently', score: 2 },
+            { text: 'We haven\'t really defined it — we just try to seem professional', score: 1 }
+          ]
+        },
+        {
+          index: 4, label: 'THE RATIONAL CASE', zone: 'blue',
+          question: 'What\'s the clearest reason someone chooses you over a cheaper or more convenient alternative?',
+          options: [
+            { text: 'A specific, well-articulated benefit they can\'t get elsewhere', score: 3 },
+            { text: 'A few reasons — but we don\'t have one crisp answer', score: 2 },
+            { text: 'Usually relationships or luck — we\'re not sure how to explain it', score: 1 }
+          ]
+        },
+        {
+          index: 5, label: 'THE EMOTIONAL CONNECTION', zone: 'red',
+          question: 'What do you want people to feel after any interaction with your brand — a website visit, a meeting, a piece of content?',
+          options: [
+            { text: 'A specific feeling we\'ve deliberately designed for — and we check that it\'s landing', score: 3 },
+            { text: 'We have an idea, but we\'ve never really tested or defined it', score: 2 },
+            { text: 'We haven\'t thought much about it — we focus on the functional stuff', score: 1 }
+          ]
+        },
+        {
+          index: 6, label: 'PURPOSE & WHY', zone: 'yellow',
+          question: 'In one sentence — why does your business exist beyond making money?',
+          options: [
+            { text: 'Yes, immediately — it\'s clear, specific, and the team believes it', score: 3 },
+            { text: 'Sort of — something about helping clients, but it\'s vague', score: 2 },
+            { text: 'Not really — we\'re focused on the product or service, not a bigger purpose', score: 1 }
+          ]
+        },
+        {
+          index: 7, label: 'BRAND COHERENCE', zone: 'green',
+          question: 'Is there a single unifying idea that connects everything your brand says and does — website, sales, team culture, delivery?',
+          options: [
+            { text: 'Yes — everything connects back to one central brand idea', score: 3 },
+            { text: 'Loosely — but different parts of the business feel disconnected', score: 2 },
+            { text: 'No — it\'s a mix of different messages depending on who\'s communicating', score: 1 }
+          ]
+        }
+      ];
+
+      const zoneColorMap: Record<string, { border: string; bg: string }> = {
+        blue:   { border: 'border-hbdi-blue',   bg: 'bg-hbdi-blue-light' },
+        green:  { border: 'border-hbdi-green',  bg: 'bg-hbdi-green-light' },
+        yellow: { border: 'border-hbdi-yellow', bg: 'bg-hbdi-yellow-light' },
+        red:    { border: 'border-hbdi-red',    bg: 'bg-hbdi-red-light' },
+      };
+
+      let currentIndex = 0;
+      const answers: Record<number, { score: number; text: string }> = {};
+
+      const progressBar = document.getElementById('progress-bar') as HTMLElement;
+      const progressText = document.getElementById('progress-text') as HTMLElement;
+      const questionLabel = document.getElementById('question-label') as HTMLElement;
+      const questionText = document.getElementById('question-text') as HTMLElement;
+      const optionsContainer = document.getElementById('options-container') as HTMLElement;
+      const backBtn = document.getElementById('back-btn') as HTMLButtonElement;
+      const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
+      const questionArea = document.getElementById('question-area') as HTMLElement;
+      const loadingState = document.getElementById('loading-state') as HTMLElement;
+      const navButtons = document.getElementById('nav-buttons') as HTMLElement;
+
+      function renderQuestion() {
+        const q = questions[currentIndex];
+        const pct = ((currentIndex) / questions.length) * 100;
+        progressBar.style.width = `${pct}%`;
+        progressText.textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+        questionLabel.textContent = q.label;
+        questionText.textContent = q.question;
+
+        const colors = zoneColorMap[q.zone];
+        optionsContainer.innerHTML = '';
+
+        q.options.forEach((opt, i) => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          const isSelected = answers[currentIndex]?.score === opt.score;
+
+          card.className = `w-full text-left p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer ${
+            isSelected
+              ? `${colors.border} ${colors.bg}`
+              : 'border-gray-200 bg-white hover:border-gray-300'
+          }`;
+
+          card.innerHTML = `<p class="text-sm leading-relaxed text-wba-deep">${opt.text}</p>`;
+
+          card.addEventListener('click', () => {
+            answers[currentIndex] = { score: opt.score, text: opt.text };
+            nextBtn.disabled = false;
+            renderQuestion();
+          });
+
+          optionsContainer.appendChild(card);
+        });
+
+        // Back button
+        backBtn.classList.toggle('hidden', currentIndex === 0);
+
+        // Next button text
+        nextBtn.textContent = currentIndex === questions.length - 1 ? 'Get My Results' : 'Next \u2192';
+        nextBtn.disabled = !answers[currentIndex];
+      }
+
+      backBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+          currentIndex--;
+          renderQuestion();
+        }
+      });
+
+      nextBtn.addEventListener('click', async () => {
+        if (!answers[currentIndex]) return;
+
+        if (currentIndex < questions.length - 1) {
+          currentIndex++;
+          renderQuestion();
+        } else {
+          // Submit
+          await submitQuiz();
+        }
+      });
+
+      async function submitQuiz() {
+        // Show loading
+        questionArea.classList.add('hidden');
+        navButtons.classList.add('hidden');
+        loadingState.classList.remove('hidden');
+        progressBar.style.width = '100%';
+
+        const intake = JSON.parse(sessionStorage.getItem('wba_scan_intake') || '{}');
+        const payload = {
+          name: intake.firstName || '',
+          businessName: intake.businessName || '',
+          role: intake.role || '',
+          answers: Object.entries(answers).map(([index, a]) => ({
+            index: parseInt(index),
+            score: a.score,
+            label: questions[parseInt(index)].label,
+            text: a.text
+          }))
+        };
+
+        try {
+          const res = await fetch('/api/generate-report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) throw new Error('Report generation failed');
+
+          const report = await res.json();
+          sessionStorage.setItem('wba_report', JSON.stringify(report));
+          window.location.href = '/scan/results';
+        } catch (err) {
+          loadingState.innerHTML = `
+            <p class="text-lg font-semibold text-red-600 mb-2">Something went wrong</p>
+            <p class="text-sm text-gray-500 mb-4">Please try again.</p>
+            <button onclick="window.location.reload()" class="bg-wba-deep text-white font-semibold py-2 px-6 rounded-lg hover:bg-wba-blue transition-colors">Retry</button>
+          `;
+        }
+      }
+
+      // Redirect if no intake data
+      if (!sessionStorage.getItem('wba_scan_intake')) {
+        window.location.href = '/scan';
+      } else {
+        renderQuestion();
+      }
+    </script>
+  </body>
+</html>

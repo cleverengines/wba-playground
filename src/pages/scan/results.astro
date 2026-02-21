@@ -1,0 +1,250 @@
+---
+import "../../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Brand Scan Results — Whole Brand Academy</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+      .boap-grid {
+        display: grid;
+        grid-template-areas:
+          'left-panel  blue    yellow  right-panel'
+          'left-panel  promise promise right-panel'
+          'left-panel  green   red     right-panel'
+          'why         why     what    what';
+        grid-template-columns: 80px 1fr 1fr 80px;
+        gap: 0;
+      }
+      @media (max-width: 768px) {
+        .boap-grid {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-[#f7f6f4] min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-wba-deep text-white py-6 px-4">
+      <div class="max-w-5xl mx-auto flex items-center gap-4">
+        <img src="/logos/wba-logo-draft.svg" alt="Whole Brand Academy" class="h-10 brightness-0 invert" />
+        <p class="text-wba-canvas text-sm md:text-base font-medium">Whole Brand Academy</p>
+      </div>
+    </header>
+
+    <main class="flex-1 px-4 py-8">
+      <div class="max-w-4xl mx-auto">
+
+        <!-- Score Hero -->
+        <section id="score-hero" class="text-center mb-10">
+          <h1 class="text-3xl md:text-4xl font-bold text-wba-deep mb-2">Your Whole Brand Scan Report</h1>
+          <p id="business-subtitle" class="text-lg text-gray-500 mb-6"></p>
+          <div class="inline-flex flex-col items-center bg-white rounded-2xl shadow-sm px-10 py-8">
+            <p class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-2">Overall Score</p>
+            <p class="text-5xl font-bold text-wba-deep"><span id="total-score">0</span><span class="text-2xl text-gray-400">/24</span></p>
+            <div id="tier-badge" class="mt-4 inline-block px-4 py-1.5 rounded-full text-sm font-bold"></div>
+          </div>
+        </section>
+
+        <!-- BOAP Grid -->
+        <section class="mb-10">
+          <h2 class="text-xl font-bold text-wba-deep mb-4 text-center">Brand-on-a-Page</h2>
+          <div class="boap-grid bg-white rounded-xl shadow-sm overflow-hidden">
+
+            <!-- Left Panel: Rational -->
+            <div class="hidden md:flex bg-slate-100 border-l-4 border-wba-blue items-center justify-center p-3" style="grid-area: left-panel; writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);">
+              <span class="text-xs font-bold uppercase tracking-widest text-wba-blue">Rational Engagement</span>
+            </div>
+
+            <!-- Blue Zone -->
+            <div id="zone-blue" class="p-5 border-l-4 border-hbdi-blue bg-hbdi-blue-light/30 relative" style="grid-area: blue;">
+              <div class="flex items-start justify-between mb-2">
+                <h3 class="font-bold text-wba-deep text-sm">Credibility & Rational Case</h3>
+                <span id="score-blue" class="bg-hbdi-blue text-white text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ml-2"></span>
+              </div>
+              <p id="insight-blue" class="text-sm text-gray-600 leading-relaxed"></p>
+            </div>
+
+            <!-- Yellow Zone -->
+            <div id="zone-yellow" class="p-5 border-l-4 border-hbdi-yellow bg-hbdi-yellow-light/30 relative" style="grid-area: yellow;">
+              <div class="flex items-start justify-between mb-2">
+                <h3 class="font-bold text-wba-deep text-sm">Differentiation & Purpose</h3>
+                <span id="score-yellow" class="bg-hbdi-yellow text-wba-deep text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ml-2"></span>
+              </div>
+              <p id="insight-yellow" class="text-sm text-gray-600 leading-relaxed"></p>
+            </div>
+
+            <!-- Brand Promise Banner -->
+            <div class="bg-wba-deep text-white p-6 text-center" style="grid-area: promise;">
+              <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-wba-teal mb-2">Brand Promise</p>
+              <p id="brand-promise" class="text-2xl md:text-3xl font-bold"></p>
+            </div>
+
+            <!-- Green Zone -->
+            <div id="zone-green" class="p-5 border-l-4 border-hbdi-green bg-hbdi-green-light/30 relative" style="grid-area: green;">
+              <div class="flex items-start justify-between mb-2">
+                <h3 class="font-bold text-wba-deep text-sm">Delivery & Coherence</h3>
+                <span id="score-green" class="bg-hbdi-green text-white text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ml-2"></span>
+              </div>
+              <p id="insight-green" class="text-sm text-gray-600 leading-relaxed"></p>
+            </div>
+
+            <!-- Red Zone -->
+            <div id="zone-red" class="p-5 border-l-4 border-hbdi-red bg-hbdi-red-light/30 relative" style="grid-area: red;">
+              <div class="flex items-start justify-between mb-2">
+                <h3 class="font-bold text-wba-deep text-sm">Personality & Emotion</h3>
+                <span id="score-red" class="bg-hbdi-red text-white text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ml-2"></span>
+              </div>
+              <p id="insight-red" class="text-sm text-gray-600 leading-relaxed"></p>
+            </div>
+
+            <!-- Right Panel: Emotional -->
+            <div class="hidden md:flex bg-pink-50 border-r-4 border-hbdi-red items-center justify-center p-3" style="grid-area: right-panel; writing-mode: vertical-rl;">
+              <span class="text-xs font-bold uppercase tracking-widest text-hbdi-red">Emotional Engagement</span>
+            </div>
+
+            <!-- Why strip -->
+            <div class="bg-gray-50 p-4 flex items-center gap-4 border-t border-gray-200" style="grid-area: why;">
+              <div class="w-12 h-12 rounded-full bg-wba-deep text-white flex items-center justify-center shrink-0">
+                <span class="text-xs font-bold">WHY</span>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Purpose</p>
+                <p id="why-text" class="text-sm text-wba-deep font-medium"></p>
+              </div>
+            </div>
+
+            <!-- What strip -->
+            <div class="bg-gray-50 p-4 flex items-center gap-4 border-t border-gray-200" style="grid-area: what;">
+              <div class="w-12 h-12 rounded-full bg-wba-deep text-white flex items-center justify-center shrink-0">
+                <span class="text-xs font-bold">WHAT</span>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Brand Promise</p>
+                <p id="what-text" class="text-sm text-wba-deep font-medium"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mobile panels -->
+          <div class="md:hidden mt-4 grid grid-cols-2 gap-3">
+            <div class="bg-slate-100 border-l-4 border-wba-blue rounded-lg p-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-wba-blue">Rational Engagement</span>
+            </div>
+            <div class="bg-pink-50 border-r-4 border-hbdi-red rounded-lg p-4 text-right">
+              <span class="text-xs font-bold uppercase tracking-wider text-hbdi-red">Emotional Engagement</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Overall Insight / Strategic Gap -->
+        <section class="mb-10">
+          <div class="bg-white rounded-xl shadow-sm p-8 border-l-4 border-wba-deep">
+            <h2 class="text-lg font-bold text-wba-deep mb-3">The Strategic Gap</h2>
+            <p id="overall-insight" class="text-gray-600 italic leading-relaxed text-lg"></p>
+          </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="bg-white rounded-xl shadow-sm p-8 text-center mb-10">
+          <h2 class="text-2xl font-bold text-wba-deep mb-3">Ready to build a brand that works as hard as you do?</h2>
+          <p class="text-gray-600 mb-6 max-w-lg mx-auto">Join as a Founding Member — lock in early pricing and get first access when we open.</p>
+          <a
+            href="/#founding-member"
+            class="inline-block bg-wba-deep text-white font-semibold py-4 px-8 rounded-lg hover:bg-wba-blue transition-colors text-lg w-full sm:w-auto"
+          >
+            Become a Founding Member &rarr;
+          </a>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-wba-deep text-white py-8 px-4">
+      <div class="max-w-5xl mx-auto flex flex-wrap items-center gap-4">
+        <img src="/logos/wba-logo-draft.svg" alt="Whole Brand Academy" class="h-8 brightness-0 invert opacity-70 shrink-0" />
+        <p class="text-white/50 text-xs sm:text-sm">Building indispensable brands.</p>
+      </div>
+      <div class="max-w-5xl mx-auto mt-4">
+        <p class="text-white/30 text-xs">This report was generated using AI based on your self-assessment responses. It is intended as a directional guide, not a definitive brand audit.</p>
+      </div>
+    </footer>
+
+    <script>
+      // Redirect if no report data
+      const reportData = sessionStorage.getItem('wba_report');
+      if (!reportData) {
+        window.location.href = '/scan';
+      } else {
+        const report = JSON.parse(reportData);
+
+        // Score hero
+        const businessSubtitle = document.getElementById('business-subtitle');
+        if (businessSubtitle) businessSubtitle.textContent = report.businessName;
+
+        const totalScoreEl = document.getElementById('total-score');
+        if (totalScoreEl) totalScoreEl.textContent = String(report.totalScore);
+
+        // Tier badge
+        const tierBadge = document.getElementById('tier-badge');
+        if (tierBadge) {
+          const tierConfig: Record<string, { label: string; bg: string; text: string }> = {
+            strong:    { label: 'Strong Brand Foundation', bg: 'bg-hbdi-green-light', text: 'text-hbdi-green' },
+            mixed:     { label: 'Mixed Signals',          bg: 'bg-hbdi-yellow-light', text: 'text-yellow-700' },
+            unbuilt:   { label: 'Unbuilt Brand',          bg: 'bg-hbdi-red-light',    text: 'text-hbdi-red' },
+            invisible: { label: 'Brand Invisible',        bg: 'bg-gray-200',          text: 'text-gray-600' },
+          };
+          const tc = tierConfig[report.tier] || tierConfig.mixed;
+          tierBadge.textContent = tc.label;
+          tierBadge.className = `mt-4 inline-block px-4 py-1.5 rounded-full text-sm font-bold ${tc.bg} ${tc.text}`;
+        }
+
+        // Zone scores and insights
+        const zones = ['blue', 'green', 'yellow', 'red'] as const;
+        const insightKeys: Record<string, string> = {
+          blue: 'blueInsight',
+          green: 'greenInsight',
+          yellow: 'yellowInsight',
+          red: 'redInsight',
+        };
+
+        zones.forEach((zone) => {
+          const scoreEl = document.getElementById(`score-${zone}`);
+          if (scoreEl) scoreEl.textContent = `${report.scores[zone]}/6`;
+
+          const insightEl = document.getElementById(`insight-${zone}`);
+          if (insightEl) insightEl.textContent = report[insightKeys[zone]];
+        });
+
+        // Brand promise
+        const brandPromise = document.getElementById('brand-promise');
+        if (brandPromise) brandPromise.textContent = report.brandPromise;
+
+        // Why text — use yellow zone score description
+        const whyText = document.getElementById('why-text');
+        if (whyText) {
+          const yellowScore = report.scores.yellow;
+          if (yellowScore >= 5) whyText.textContent = 'Clear and compelling purpose';
+          else if (yellowScore >= 3) whyText.textContent = 'Purpose needs sharpening';
+          else whyText.textContent = 'Purpose undefined';
+        }
+
+        // What text
+        const whatText = document.getElementById('what-text');
+        if (whatText) whatText.textContent = report.brandPromise;
+
+        // Overall insight
+        const overallInsight = document.getElementById('overall-insight');
+        if (overallInsight) overallInsight.textContent = report.overallInsight;
+      }
+    </script>
+  </body>
+</html>
