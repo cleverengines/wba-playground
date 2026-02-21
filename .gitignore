@@ -28,3 +28,8 @@ node_modules/
 .env
 .env.local
 .env.*.local .vercel
+
+# Build outputs — never commit
+dist/
+.vercel/output/
+.astro/

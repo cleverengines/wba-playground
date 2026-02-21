@@ -19,7 +19,7 @@ import "../../styles/global.css";
           'left-panel  blue    yellow  right-panel'
           'left-panel  promise promise right-panel'
           'left-panel  green   red     right-panel'
-          'why         why     what    what';
+          'golden      golden  golden  golden';
         grid-template-columns: 80px 1fr 1fr 80px;
         gap: 0;
       }
@@ -54,9 +54,9 @@ import "../../styles/global.css";
           </div>
         </section>
 
-        <!-- BOAP Grid -->
+        <!-- Scan Grid -->
         <section class="mb-10">
-          <h2 class="text-xl font-bold text-wba-deep mb-4 text-center">Brand-on-a-Page</h2>
+          <h2 id="scan-grid-heading" class="text-xl font-bold text-wba-deep mb-4 text-center"></h2>
           <div class="boap-grid bg-white rounded-xl shadow-sm overflow-hidden">
 
             <!-- Left Panel: Rational -->
@@ -111,25 +111,28 @@ import "../../styles/global.css";
               <span class="text-xs font-bold uppercase tracking-widest text-hbdi-red">Emotional Engagement</span>
             </div>
 
-            <!-- Why strip -->
-            <div class="bg-gray-50 p-4 flex items-center gap-4 border-t border-gray-200" style="grid-area: why;">
-              <div class="w-12 h-12 rounded-full bg-wba-deep text-white flex items-center justify-center shrink-0">
-                <span class="text-xs font-bold">WHY</span>
+            <!-- Golden Circle strip: WHY / HOW / WHAT -->
+            <div class="bg-wba-deep border-t border-white/10 grid grid-cols-3" style="grid-area: golden;">
+              <div class="p-5 flex flex-col items-center text-center gap-2">
+                <div class="w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center">
+                  <span class="text-xs font-bold">WHY</span>
+                </div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-white/50">Purpose</p>
+                <p id="why-text" class="text-xs text-white font-medium leading-snug"></p>
               </div>
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Purpose</p>
-                <p id="why-text" class="text-sm text-wba-deep font-medium"></p>
+              <div class="p-5 flex flex-col items-center text-center gap-2 border-x border-white/10">
+                <div class="w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center">
+                  <span class="text-xs font-bold">HOW</span>
+                </div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-white/50">Approach</p>
+                <p id="how-text" class="text-xs text-white font-medium leading-snug"></p>
               </div>
-            </div>
-
-            <!-- What strip -->
-            <div class="bg-gray-50 p-4 flex items-center gap-4 border-t border-gray-200" style="grid-area: what;">
-              <div class="w-12 h-12 rounded-full bg-wba-deep text-white flex items-center justify-center shrink-0">
-                <span class="text-xs font-bold">WHAT</span>
-              </div>
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Brand Promise</p>
-                <p id="what-text" class="text-sm text-wba-deep font-medium"></p>
+              <div class="p-5 flex flex-col items-center text-center gap-2">
+                <div class="w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center">
+                  <span class="text-xs font-bold">WHAT</span>
+                </div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-white/50">Brand Promise</p>
+                <p id="what-text" class="text-xs text-white font-medium leading-snug"></p>
               </div>
             </div>
           </div>
@@ -186,6 +189,10 @@ import "../../styles/global.css";
       } else {
         const report = JSON.parse(reportData);
 
+        // Grid heading — business name, no BOAP reference
+        const scanHeading = document.getElementById('scan-grid-heading');
+        if (scanHeading) scanHeading.textContent = report.businessName;
+
         // Score hero
         const businessSubtitle = document.getElementById('business-subtitle');
         if (businessSubtitle) businessSubtitle.textContent = report.businessName;
@@ -228,14 +235,18 @@ import "../../styles/global.css";
         const brandPromise = document.getElementById('brand-promise');
         if (brandPromise) brandPromise.textContent = report.brandPromise;
 
-        // Why text — use yellow zone score description
+        // Why text
         const whyText = document.getElementById('why-text');
         if (whyText) {
           const yellowScore = report.scores.yellow;
-          if (yellowScore >= 5) whyText.textContent = 'Clear and compelling purpose';
-          else if (yellowScore >= 3) whyText.textContent = 'Purpose needs sharpening';
-          else whyText.textContent = 'Purpose undefined';
+          if (yellowScore >= 5) whyText.textContent = 'Clear and compelling';
+          else if (yellowScore >= 3) whyText.textContent = 'Needs sharpening';
+          else whyText.textContent = 'Not yet defined';
         }
+
+        // How text
+        const howText = document.getElementById('how-text');
+        if (howText) howText.textContent = report.howText || '';
 
         // What text
         const whatText = document.getElementById('what-text');

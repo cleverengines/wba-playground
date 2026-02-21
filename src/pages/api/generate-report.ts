@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import Anthropic from '@anthropic-ai/sdk';
 
 export const POST: APIRoute = async ({ request }) => {
-  const { name, businessName, role, answers } = await request.json();
+  const { name, businessName, role, answers, statedDifferentiator } = await request.json();
 
   // Compute zone scores
   const scores: Record<string, number> = { blue: 0, green: 0, yellow: 0, red: 0 };
@@ -17,28 +17,35 @@ export const POST: APIRoute = async ({ request }) => {
     .map((a: { label: string; text: string }) => `- ${a.label}: "${a.text}"`)
     .join('\n');
 
-  const systemPrompt = `You are a senior brand strategist at Whole Brand Academy, experts in the Whole Brain Branding methodology (HBDI-based). You write with authority and directness — no jargon, no fluff, no corporate speak. You name gaps honestly but constructively. Your insights should feel like they came from a smart consultant who spent an hour with this business, not a generic quiz.`;
+  const systemPrompt = `You are a brand strategist at Whole Brand Academy. You write like a smart, straight-talking friend — not a consultant. Short sentences. Plain words. No jargon. No filler. Every line should either make them think "that's exactly it" or "ouch, that's true." Be honest about gaps — name what they're costing, not just what they are. Two sentences max per insight zone.`;
 
-  const userPrompt = `Brand Scan results for ${businessName} (${role}: ${name}).
+  const differentiatorLine = statedDifferentiator
+    ? `Their stated differentiator: "We are the only ${statedDifferentiator}"`
+    : `They did not complete the differentiator sentence — treat this as a signal of unclear positioning.`;
 
-Scores (each out of 6, combining two related questions):
+  const userPrompt = `Brand Scan for ${businessName} (${role}: ${name}).
+
+${differentiatorLine}
+
+Scores (each out of 6):
 - Blue (Credibility + Rational Case): ${scores.blue}/6
-- Green (Delivery/Process + Brand Coherence): ${scores.green}/6
-- Yellow (Differentiation + Purpose/Why): ${scores.yellow}/6
-- Red (Personality/Voice + Emotional Connection): ${scores.red}/6
+- Green (Delivery + Coherence): ${scores.green}/6
+- Yellow (Differentiation + Purpose): ${scores.yellow}/6
+- Red (Personality + Emotional Connection): ${scores.red}/6
 - Total: ${totalScore}/24
 
 Their answers:
 ${answerList}
 
-Return ONLY a valid JSON object with these exact fields:
+Return ONLY a valid JSON object with exactly these fields:
 {
-  "blueInsight": "2-3 sentences on their credibility and rational case. Specific to their score. If score is 2/6 or below, name what that's costing them.",
-  "greenInsight": "2-3 sentences on delivery consistency and brand coherence.",
-  "yellowInsight": "2-3 sentences on differentiation and purpose. If weak, explain why vague differentiation means competing on price.",
-  "redInsight": "2-3 sentences on brand personality and emotional connection.",
-  "brandPromise": "3-6 words. The potential DNA of this brand. Tension between rational and emotional. Like 'Modern Romance' or 'Advanced Simplicity'. NOT a tagline. Do not use their business name.",
-  "overallInsight": "3-4 sentences. The single most important thing this brand needs to address. Honest, specific, gap-stretching. Make them feel the cost of not fixing it.",
+  "blueInsight": "2 sentences. Credibility and rational case — name what's there and what's missing. If weak, say what it costs them in plain terms.",
+  "greenInsight": "2 sentences. Delivery consistency and brand coherence — where they're solid or where inconsistency is silently killing trust.",
+  "yellowInsight": "2 sentences. Differentiation and purpose — compare their stated differentiator (if any) against what the scan reveals. If they couldn't complete the sentence, say so directly.",
+  "redInsight": "2 sentences. Personality and emotional connection — are clients feeling something deliberate, or just 'meh, professional enough'?",
+  "brandPromise": "3-6 words. Tension-filled shorthand for what this brand could stand for — synthesise their rational strengths and emotional gaps. If their stated differentiator is strong, anchor it there. If weak or absent, make it aspirational. NOT a tagline. Don't use the business name.",
+  "howText": "One sentence. How do they do what they do — their approach or method, drawn from their process/coherence answers.",
+  "overallInsight": "3 sentences max. The single most important thing this brand needs to fix. Use their own stated differentiator (or lack of one) as the hook. Make the cost of inaction concrete and real.",
   "tier": "strong OR mixed OR unbuilt OR invisible"
 }
 
@@ -84,6 +91,7 @@ Tier: strong=20-24, mixed=13-19, unbuilt=7-12, invisible=6 or below.`;
       businessName,
       name,
       role,
+      statedDifferentiator: statedDifferentiator || null,
       answers,
     }), {
       status: 200,

@@ -37,15 +37,15 @@ import "../../styles/global.css";
           <ul class="space-y-3 text-gray-600 text-sm">
             <li class="flex items-start gap-3">
               <span class="text-wba-teal font-bold mt-0.5">&#10003;</span>
-              <span>A visual <strong>Brand-on-a-Page</strong> showing your strengths and gaps across all four thinking zones</span>
+              <span>A visual map of your brand across four zones — where you're strong and where you're leaking</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-wba-teal font-bold mt-0.5">&#10003;</span>
-              <span>An AI-generated <strong>Brand Promise</strong> — the potential DNA of your brand in 3–6 words</span>
+              <span>Honest, specific feedback on each zone — no fluff</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-wba-teal font-bold mt-0.5">&#10003;</span>
-              <span>A <strong>gap analysis</strong> with honest, specific insight on what's costing you the most</span>
+              <span>The single biggest gap holding your brand back right now</span>
             </li>
           </ul>
         </div>
@@ -87,6 +87,19 @@ import "../../styles/global.css";
                 placeholder="e.g. Founder, Marketing Director"
               />
             </div>
+            <div>
+              <label for="statedDifferentiator" class="block text-sm font-medium text-wba-deep mb-1">
+                Complete this sentence <span class="text-gray-400 font-normal">(optional)</span>
+              </label>
+              <p class="text-xs text-gray-400 mb-2">"We are the only [type of business] that..."</p>
+              <input
+                type="text"
+                id="statedDifferentiator"
+                name="statedDifferentiator"
+                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
+                placeholder="e.g. ...teach brand strategy using brain science"
+              />
+            </div>
             <button
               type="submit"
               class="w-full bg-wba-deep text-white font-semibold py-3 px-6 rounded-lg hover:bg-wba-blue transition-colors text-base"
@@ -105,10 +118,11 @@ import "../../styles/global.css";
         const firstName = (document.getElementById('firstName') as HTMLInputElement).value.trim();
         const businessName = (document.getElementById('businessName') as HTMLInputElement).value.trim();
         const role = (document.getElementById('role') as HTMLInputElement).value.trim();
+        const statedDifferentiator = (document.getElementById('statedDifferentiator') as HTMLInputElement).value.trim();
 
         if (!firstName || !businessName || !role) return;
 
-        sessionStorage.setItem('wba_scan_intake', JSON.stringify({ firstName, businessName, role }));
+        sessionStorage.setItem('wba_scan_intake', JSON.stringify({ firstName, businessName, role, statedDifferentiator }));
         window.location.href = '/scan/quiz';
       });
     </script>
