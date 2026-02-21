@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import Anthropic from '@anthropic-ai/sdk';
 
 export const POST: APIRoute = async ({ request }) => {
-  const { name, businessName, role, answers, statedDifferentiator } = await request.json();
+  const { name, businessName, role, answers, businessType, statedDifferentiator } = await request.json();
 
   // Compute zone scores
   const scores: Record<string, number> = { blue: 0, green: 0, yellow: 0, red: 0 };
@@ -19,9 +19,9 @@ export const POST: APIRoute = async ({ request }) => {
 
   const systemPrompt = `You are a brand strategist at Whole Brand Academy. You write like a smart, straight-talking friend — not a consultant. Short sentences. Plain words. No jargon. No filler. Every line should either make them think "that's exactly it" or "ouch, that's true." Be honest about gaps — name what they're costing, not just what they are. Two sentences max per insight zone.`;
 
-  const differentiatorLine = statedDifferentiator
-    ? `Their stated differentiator: "We are the only ${statedDifferentiator}"`
-    : `They did not complete the differentiator sentence — treat this as a signal of unclear positioning.`;
+  const differentiatorLine = (businessType || statedDifferentiator)
+    ? `Their self-stated positioning: "We are the only ${businessType || '[type not given]'} that ${statedDifferentiator || '[left blank]'}"`
+    : `They left the positioning sentence blank — treat this as a significant signal of unclear positioning.`;
 
   const userPrompt = `Brand Scan for ${businessName} (${role}: ${name}).
 
@@ -91,6 +91,7 @@ Tier: strong=20-24, mixed=13-19, unbuilt=7-12, invisible=6 or below.`;
       businessName,
       name,
       role,
+      businessType: businessType || null,
       statedDifferentiator: statedDifferentiator || null,
       answers,
     }), {

@@ -88,17 +88,31 @@ import "../../styles/global.css";
               />
             </div>
             <div>
-              <label for="statedDifferentiator" class="block text-sm font-medium text-wba-deep mb-1">
-                Complete this sentence <span class="text-gray-400 font-normal">(optional)</span>
+              <label class="block text-sm font-medium text-wba-deep mb-1">
+                Complete this sentence <span class="text-gray-400 font-normal">(optional but useful)</span>
               </label>
-              <p class="text-xs text-gray-400 mb-2">"We are the only [type of business] that..."</p>
-              <input
-                type="text"
-                id="statedDifferentiator"
-                name="statedDifferentiator"
-                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
-                placeholder="e.g. ...teach brand strategy using brain science"
-              />
+              <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm text-gray-500 shrink-0 w-36">We are the only</span>
+                  <input
+                    type="text"
+                    id="businessType"
+                    name="businessType"
+                    class="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
+                    placeholder="e.g. brand consultancy"
+                  />
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-sm text-gray-500 shrink-0 w-36">...that</span>
+                  <input
+                    type="text"
+                    id="statedDifferentiator"
+                    name="statedDifferentiator"
+                    class="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
+                    placeholder="e.g. uses brain science to build brands"
+                  />
+                </div>
+              </div>
             </div>
             <button
               type="submit"
@@ -118,11 +132,12 @@ import "../../styles/global.css";
         const firstName = (document.getElementById('firstName') as HTMLInputElement).value.trim();
         const businessName = (document.getElementById('businessName') as HTMLInputElement).value.trim();
         const role = (document.getElementById('role') as HTMLInputElement).value.trim();
+        const businessType = (document.getElementById('businessType') as HTMLInputElement).value.trim();
         const statedDifferentiator = (document.getElementById('statedDifferentiator') as HTMLInputElement).value.trim();
 
         if (!firstName || !businessName || !role) return;
 
-        sessionStorage.setItem('wba_scan_intake', JSON.stringify({ firstName, businessName, role, statedDifferentiator }));
+        sessionStorage.setItem('wba_scan_intake', JSON.stringify({ firstName, businessName, role, businessType, statedDifferentiator }));
         window.location.href = '/scan/quiz';
       });
     </script>
