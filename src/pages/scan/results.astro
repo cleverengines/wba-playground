@@ -156,6 +156,91 @@ import "../../styles/global.css";
           </div>
         </section>
 
+        <!-- Website Scanner -->
+        <section class="mb-10" id="website-scan-section">
+          <div class="bg-white rounded-xl shadow-sm p-8 border-l-4 border-wba-teal">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full bg-wba-teal/10 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-5 h-5 text-wba-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+              </div>
+              <div class="flex-1">
+                <h2 class="text-lg font-bold text-wba-deep mb-1">Want to go deeper?</h2>
+                <p class="text-sm text-gray-500 mb-4">Drop your website URL and we'll check whether your homepage actually reflects your brand — or contradicts it.</p>
+                <div id="website-input-area" class="flex gap-3">
+                  <input
+                    type="url"
+                    id="website-url-input"
+                    placeholder="https://yourbusiness.com"
+                    class="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-wba-teal focus:border-transparent"
+                  />
+                  <button
+                    id="scan-website-btn"
+                    class="bg-wba-teal text-white font-semibold px-5 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity shrink-0"
+                  >
+                    Scan it →
+                  </button>
+                </div>
+                <p id="website-scan-error" class="hidden text-xs text-red-500 mt-2"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Website scan results — hidden until populated -->
+          <div id="website-scan-results" class="hidden mt-4 bg-white rounded-xl shadow-sm overflow-hidden">
+
+            <!-- Congruency score header -->
+            <div class="bg-wba-deep text-white p-6 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-wba-teal mb-1">Homepage Congruency</p>
+                <p id="ws-headline" class="text-lg font-bold leading-snug max-w-xl"></p>
+              </div>
+              <div class="text-right shrink-0 ml-4">
+                <p id="ws-score" class="text-5xl font-bold"></p>
+                <p class="text-xs text-white/50">/ 100</p>
+              </div>
+            </div>
+
+            <!-- Zone congruency grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+              <div class="p-5 border-l-4 border-hbdi-blue">
+                <p class="text-xs font-bold uppercase tracking-wider text-hbdi-blue mb-1">Credibility</p>
+                <p id="ws-blue" class="text-sm text-gray-600 leading-relaxed"></p>
+              </div>
+              <div class="p-5 border-l-4 border-hbdi-yellow">
+                <p class="text-xs font-bold uppercase tracking-wider text-yellow-600 mb-1">Differentiation</p>
+                <p id="ws-yellow" class="text-sm text-gray-600 leading-relaxed"></p>
+              </div>
+              <div class="p-5 border-l-4 border-hbdi-green border-t border-t-gray-100">
+                <p class="text-xs font-bold uppercase tracking-wider text-hbdi-green mb-1">Process & Delivery</p>
+                <p id="ws-green" class="text-sm text-gray-600 leading-relaxed"></p>
+              </div>
+              <div class="p-5 border-l-4 border-hbdi-red border-t border-t-gray-100">
+                <p class="text-xs font-bold uppercase tracking-wider text-hbdi-red mb-1">Personality</p>
+                <p id="ws-red" class="text-sm text-gray-600 leading-relaxed"></p>
+              </div>
+            </div>
+
+            <!-- Biggest gap + quick win -->
+            <div class="p-6 bg-gray-50 border-t border-gray-100 space-y-4">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-red-500 mb-1">Biggest Gap</p>
+                <p id="ws-gap" class="text-sm text-gray-700 leading-relaxed"></p>
+              </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-wba-teal mb-1">Quick Win</p>
+                <p id="ws-quickwin" class="text-sm text-gray-700 leading-relaxed"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading state -->
+          <div id="website-scan-loading" class="hidden mt-4 bg-white rounded-xl shadow-sm p-8 text-center">
+            <div class="inline-block w-8 h-8 border-4 border-wba-teal border-t-transparent rounded-full animate-spin mb-3"></div>
+            <p class="text-sm font-semibold text-wba-deep">Scanning your homepage...</p>
+            <p class="text-xs text-gray-400 mt-1">Usually takes 5–10 seconds</p>
+          </div>
+        </section>
+
         <!-- CTA Section -->
         <section class="bg-white rounded-xl shadow-sm p-8 text-center mb-10">
           <h2 class="text-2xl font-bold text-wba-deep mb-3">Ready to build a brand that works as hard as you do?</h2>
@@ -255,6 +340,62 @@ import "../../styles/global.css";
         // Overall insight
         const overallInsight = document.getElementById('overall-insight');
         if (overallInsight) overallInsight.textContent = report.overallInsight;
+
+        // Website scanner
+        const scanBtn = document.getElementById('scan-website-btn') as HTMLButtonElement;
+        const urlInput = document.getElementById('website-url-input') as HTMLInputElement;
+        const errorEl = document.getElementById('website-scan-error') as HTMLElement;
+        const loadingEl = document.getElementById('website-scan-loading') as HTMLElement;
+        const resultsEl = document.getElementById('website-scan-results') as HTMLElement;
+        const inputArea = document.getElementById('website-input-area') as HTMLElement;
+
+        scanBtn?.addEventListener('click', async () => {
+          const url = urlInput?.value.trim();
+          if (!url) return;
+
+          errorEl.classList.add('hidden');
+          inputArea.classList.add('hidden');
+          loadingEl.classList.remove('hidden');
+          resultsEl.classList.add('hidden');
+
+          try {
+            const res = await fetch('/api/scan-website', {
+              method: 'POST',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ websiteUrl: url, report }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || data.error === 'fetch_failed' || data.error === 'insufficient_content') {
+              errorEl.textContent = data.message || 'Something went wrong. Try again.';
+              errorEl.classList.remove('hidden');
+              inputArea.classList.remove('hidden');
+              loadingEl.classList.add('hidden');
+              return;
+            }
+
+            // Populate results
+            document.getElementById('ws-score')!.textContent = String(data.congruencyScore);
+            document.getElementById('ws-headline')!.textContent = data.headline;
+            document.getElementById('ws-blue')!.textContent = data.blueCongruency;
+            document.getElementById('ws-green')!.textContent = data.greenCongruency;
+            document.getElementById('ws-yellow')!.textContent = data.yellowCongruency;
+            document.getElementById('ws-red')!.textContent = data.redCongruency;
+            document.getElementById('ws-gap')!.textContent = data.biggestGap;
+            document.getElementById('ws-quickwin')!.textContent = data.quickWin;
+
+            loadingEl.classList.add('hidden');
+            resultsEl.classList.remove('hidden');
+
+          } catch {
+            errorEl.textContent = 'Network error — please try again.';
+            errorEl.classList.remove('hidden');
+            inputArea.classList.remove('hidden');
+            loadingEl.classList.add('hidden');
+          }
+        });
       }
     </script>
   </body>
