@@ -44,43 +44,57 @@ Return ONLY a valid JSON object with these exact fields:
 
 Tier: strong=20-24, mixed=13-19, unbuilt=7-12, invisible=6 or below.`;
 
-  const client = new Anthropic({ apiKey: import.meta.env.ANTHROPIC_API_KEY });
-
-  const message = await client.messages.create({
-    model: 'claude-3-5-haiku-20241022',
-    max_tokens: 1024,
-    system: systemPrompt,
-    messages: [{ role: 'user', content: userPrompt }],
-  });
-
-  // Extract text content
-  const textBlock = message.content.find((b: { type: string }) => b.type === 'text');
-  const rawText = textBlock && 'text' in textBlock ? textBlock.text : '';
-
-  // Parse JSON from response (handle possible markdown wrapping)
-  const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
-    return new Response(JSON.stringify({ error: 'Failed to parse AI response' }), {
+  const apiKey = import.meta.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    return new Response(JSON.stringify({ error: 'ANTHROPIC_API_KEY not configured' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const report = JSON.parse(jsonMatch[0]);
+  try {
+    const client = new Anthropic({ apiKey });
 
-  // Add scores to report
-  const result = {
-    ...report,
-    scores,
-    totalScore,
-    businessName,
-    name,
-    role,
-    answers,
-  };
+    const message = await client.messages.create({
+      model: 'claude-haiku-4-5',
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+    });
 
-  return new Response(JSON.stringify(result), {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  });
+    // Extract text content
+    const textBlock = message.content.find((b: { type: string }) => b.type === 'text');
+    const rawText = textBlock && 'text' in textBlock ? textBlock.text : '';
+
+    // Parse JSON from response (handle possible markdown wrapping)
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return new Response(JSON.stringify({ error: 'Failed to parse AI response', raw: rawText }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const report = JSON.parse(jsonMatch[0]);
+
+    return new Response(JSON.stringify({
+      ...report,
+      scores,
+      totalScore,
+      businessName,
+      name,
+      role,
+      answers,
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return new Response(JSON.stringify({ error: 'Anthropic API call failed', detail: message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 };

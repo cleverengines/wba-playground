@@ -247,19 +247,24 @@ import "../../styles/global.css";
         try {
           const res = await fetch('/api/generate-report', {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
 
-          if (!res.ok) throw new Error('Report generation failed');
+          if (!res.ok) {
+            const errBody = await res.json().catch(() => ({}));
+            throw new Error(errBody.detail || errBody.error || `HTTP ${res.status}`);
+          }
 
           const report = await res.json();
           sessionStorage.setItem('wba_report', JSON.stringify(report));
           window.location.href = '/scan/results';
         } catch (err) {
+          const msg = err instanceof Error ? err.message : 'Unknown error';
           loadingState.innerHTML = `
             <p class="text-lg font-semibold text-red-600 mb-2">Something went wrong</p>
-            <p class="text-sm text-gray-500 mb-4">Please try again.</p>
+            <p class="text-sm text-gray-400 mb-4 font-mono">${msg}</p>
             <button onclick="window.location.reload()" class="bg-wba-deep text-white font-semibold py-2 px-6 rounded-lg hover:bg-wba-blue transition-colors">Retry</button>
           `;
         }
