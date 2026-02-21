@@ -77,6 +77,17 @@ import "../../styles/global.css";
               />
             </div>
             <div>
+              <label for="email" class="block text-sm font-medium text-wba-deep mb-1">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
+                placeholder="e.g. sarah@acmestudios.com"
+              />
+            </div>
+            <div>
               <label for="role" class="block text-sm font-medium text-wba-deep mb-1">Your Role</label>
               <input
                 type="text"
@@ -130,6 +141,7 @@ import "../../styles/global.css";
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const firstName = (document.getElementById('firstName') as HTMLInputElement).value.trim();
+        const email = (document.getElementById('email') as HTMLInputElement).value.trim();
         const businessName = (document.getElementById('businessName') as HTMLInputElement).value.trim();
         const role = (document.getElementById('role') as HTMLInputElement).value.trim();
         const businessType = (document.getElementById('businessType') as HTMLInputElement).value.trim();
@@ -137,7 +149,7 @@ import "../../styles/global.css";
 
         if (!firstName || !businessName || !role) return;
 
-        sessionStorage.setItem('wba_scan_intake', JSON.stringify({ firstName, businessName, role, businessType, statedDifferentiator }));
+        sessionStorage.setItem('wba_scan_intake', JSON.stringify({ firstName, email, businessName, role, businessType, statedDifferentiator }));
         window.location.href = '/scan/quiz';
       });
     </script>

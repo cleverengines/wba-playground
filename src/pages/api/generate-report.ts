@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import Anthropic from '@anthropic-ai/sdk';
 
 export const POST: APIRoute = async ({ request }) => {
-  const { name, businessName, role, answers, businessType, statedDifferentiator } = await request.json();
+  const { name, email, businessName, role, answers, businessType, statedDifferentiator } = await request.json();
 
   // Compute zone scores
   const scores: Record<string, number> = { blue: 0, green: 0, yellow: 0, red: 0 };
@@ -91,6 +91,7 @@ Tier: strong=20-24, mixed=13-19, unbuilt=7-12, invisible=6 or below.`;
       businessName,
       name,
       role,
+      email: email || null,
       businessType: businessType || null,
       statedDifferentiator: statedDifferentiator || null,
       answers,

@@ -234,6 +234,7 @@ import "../../styles/global.css";
         const intake = JSON.parse(sessionStorage.getItem('wba_scan_intake') || '{}');
         const payload = {
           name: intake.firstName || '',
+          email: intake.email || '',
           businessName: intake.businessName || '',
           role: intake.role || '',
           businessType: intake.businessType || '',
