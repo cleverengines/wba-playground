@@ -84,8 +84,20 @@ Tier: strong=20-24, mixed=13-19, unbuilt=7-12, invisible=6 or below.`;
 
     const report = JSON.parse(jsonMatch[0]);
 
+    // Strip markdown formatting from all AI-generated string fields
+    const stripMarkdown = (str: string) =>
+      str.replace(/\*\*(.*?)\*\*/g, '$1')
+         .replace(/\*(.*?)\*/g, '$1')
+         .replace(/__(.*?)__/g, '$1')
+         .replace(/_(.*?)_/g, '$1');
+
+    const cleanedReport: Record<string, unknown> = {};
+    for (const [key, val] of Object.entries(report)) {
+      cleanedReport[key] = typeof val === 'string' ? stripMarkdown(val) : val;
+    }
+
     const result = {
-      ...report,
+      ...cleanedReport,
       scores,
       totalScore,
       businessName,
@@ -97,14 +109,18 @@ Tier: strong=20-24, mixed=13-19, unbuilt=7-12, invisible=6 or below.`;
       answers,
     };
 
-    // Log to Google Sheets — fire and forget, never block the response
+    // Log to Google Sheets — awaited so Vercel doesn't kill it before it completes
     const sheetsUrl = import.meta.env.SHEETS_WEBHOOK_URL;
     if (sheetsUrl) {
-      fetch(sheetsUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(result),
-      }).catch(() => { /* silent fail — sheets logging never breaks the scan */ });
+      try {
+        await fetch(sheetsUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(result),
+        });
+      } catch {
+        // Silent fail — Sheets logging never breaks the scan
+      }
     }
 
     return new Response(JSON.stringify(result), {
