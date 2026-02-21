@@ -84,7 +84,7 @@ Tier: strong=20-24, mixed=13-19, unbuilt=7-12, invisible=6 or below.`;
 
     const report = JSON.parse(jsonMatch[0]);
 
-    return new Response(JSON.stringify({
+    const result = {
       ...report,
       scores,
       totalScore,
@@ -95,7 +95,19 @@ Tier: strong=20-24, mixed=13-19, unbuilt=7-12, invisible=6 or below.`;
       businessType: businessType || null,
       statedDifferentiator: statedDifferentiator || null,
       answers,
-    }), {
+    };
+
+    // Log to Google Sheets — fire and forget, never block the response
+    const sheetsUrl = import.meta.env.SHEETS_WEBHOOK_URL;
+    if (sheetsUrl) {
+      fetch(sheetsUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(result),
+      }).catch(() => { /* silent fail — sheets logging never breaks the scan */ });
+    }
+
+    return new Response(JSON.stringify(result), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
