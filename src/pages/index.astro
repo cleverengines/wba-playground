@@ -99,7 +99,7 @@ const sectionModuleCounts = sections.map((s) => ({
           const colour = sectionColourMap[section.n];
           return (
             <div id={`section-${section.n}`} class="mb-12 scroll-mt-6">
-              <div class="flex items-center gap-3 mb-5">
+              <div class="section-header-row flex items-center gap-3 mb-5 px-2 py-1 -mx-2">
                 <span
                   class="text-[10px] font-semibold uppercase tracking-[0.15em] px-2.5 py-1 rounded-full text-white"
                   style={`background-color: ${colour}`}
@@ -245,6 +245,39 @@ const sectionModuleCounts = sections.map((s) => ({
 
       window.addEventListener("storage", updateDashboard);
       updateDashboard();
+
+      // ── Smooth scroll + landing flourish for section cards ──────────────
+      document.querySelectorAll<HTMLAnchorElement>("a[href^='#section-']").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute("href")!.slice(1);
+          const target = document.getElementById(targetId);
+          if (!target) return;
+
+          // Smooth scroll
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+          // After scroll settles, flash a highlight on the section header
+          setTimeout(() => {
+            const header = target.querySelector(".section-header-row") as HTMLElement | null;
+            if (!header) return;
+            header.classList.add("section-arrive");
+            setTimeout(() => header.classList.remove("section-arrive"), 900);
+          }, 550);
+        });
+      });
     </script>
+
+    <style>
+      /* Landing pulse — brief glow sweep when you arrive at a section */
+      @keyframes sectionArrive {
+        0%   { background-color: transparent; }
+        25%  { background-color: rgba(100, 165, 191, 0.12); border-radius: 10px; }
+        100% { background-color: transparent; }
+      }
+      .section-arrive {
+        animation: sectionArrive 0.85s ease-out forwards;
+      }
+    </style>
   </body>
 </html>
