@@ -60,13 +60,17 @@ const sectionModuleCounts = sections.map((s) => ({
         {sectionModuleCounts.map((section) => {
           const colour = sectionColourMap[section.n];
           return (
-            <div
-              class="bg-white rounded-xl shadow-sm border-l-4 p-5"
+            <a
+              href={`#section-${section.n}`}
+              class="group bg-white rounded-xl shadow-sm border-l-4 p-5 block hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
               style={`border-color: ${colour}`}
               data-section={section.n}
             >
-              <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-1">Section {section.n}</p>
-              <h3 class="font-bold text-wba-deep text-lg mb-3">{section.title}</h3>
+              <div class="flex items-start justify-between mb-1">
+                <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400">Section {section.n}</p>
+                <span class="text-[10px] font-semibold text-gray-300 group-hover:text-gray-400 transition-colors uppercase tracking-wider">Jump to ↓</span>
+              </div>
+              <h3 class="font-bold text-wba-deep text-lg mb-3 group-hover:text-wba-blue transition-colors">{section.title}</h3>
               <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
                 <span class="text-sm text-gray-500">
                   <span class="section-complete font-bold text-wba-deep text-xl" data-section={section.n}>0</span>
@@ -81,7 +85,7 @@ const sectionModuleCounts = sections.map((s) => ({
                   ></div>
                 </div>
               </div>
-            </div>
+            </a>
           );
         })}
       </section>
@@ -94,7 +98,7 @@ const sectionModuleCounts = sections.map((s) => ({
           const sectionMods = modules.filter((m) => m.section === section.n);
           const colour = sectionColourMap[section.n];
           return (
-            <div class="mb-12">
+            <div id={`section-${section.n}`} class="mb-12 scroll-mt-6">
               <div class="flex items-center gap-3 mb-5">
                 <span
                   class="text-[10px] font-semibold uppercase tracking-[0.15em] px-2.5 py-1 rounded-full text-white"
