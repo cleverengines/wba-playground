@@ -2,14 +2,12 @@
 import CourseLayout from "../../layouts/CourseLayout.astro";
 import { modules, sections, sectionLabels } from "../../data/modules";
 
-export function getStaticPaths() {
-  return modules.map((mod) => ({
-    params: { slug: mod.slug },
-    props: { mod },
-  }));
-}
+const { slug } = Astro.params;
+const mod = modules.find((m) => m.slug === slug);
 
-const { mod } = Astro.props;
+if (!mod) {
+  return Astro.redirect("/");
+}
 const currentIndex = modules.findIndex((m) => m.n === mod.n);
 const prevModule = currentIndex > 0 ? modules[currentIndex - 1] : null;
 const nextModule = currentIndex < modules.length - 1 ? modules[currentIndex + 1] : null;
