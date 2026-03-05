@@ -19,27 +19,21 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
 
-  // Fetch the homepage
+  // Fetch the homepage via Jina Reader (handles Cloudflare, JS rendering, anti-bot)
   let homepageText = '';
   try {
-    const res = await fetch(websiteUrl, {
+    const jinaUrl = `https://r.jina.ai/${websiteUrl}`;
+    const res = await fetch(jinaUrl, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WBAScanner/1.0)' },
       signal: AbortSignal.timeout(8000),
     });
-    const html = await res.text();
-
-    // Strip HTML tags and collapse whitespace
-    homepageText = html
-      .replace(/<script[\s\S]*?<\/script>/gi, '')
-      .replace(/<style[\s\S]*?<\/style>/gi, '')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/&nbsp;/g, ' ')
-      .replace(/&amp;/g, '&')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, 4000); // Cap at 4000 chars — enough to assess a homepage
+    
+    if (!res.ok) {
+      throw new Error(`Jina returned ${res.status}`);
+    }
+    
+    homepageText = await res.text();
+    homepageText = homepageText.trim().slice(0, 4000); // Cap at 4000 chars
 
   } catch {
     return new Response(JSON.stringify({

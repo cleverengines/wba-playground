@@ -99,31 +99,30 @@ import "../../styles/global.css";
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-wba-deep mb-1">
+              <label class="block text-sm font-medium text-wba-deep mb-3">
                 Complete this sentence <span class="text-gray-400 font-normal">(optional but useful)</span>
               </label>
-              <div class="space-y-2">
-                <div class="flex items-center gap-2">
-                  <span class="text-sm text-gray-500 shrink-0 w-36">We are the only</span>
-                  <input
-                    type="text"
-                    id="businessType"
-                    name="businessType"
-                    class="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
-                    placeholder="e.g. brand consultancy"
-                  />
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-sm text-gray-500 shrink-0 w-36">...that</span>
-                  <input
-                    type="text"
-                    id="statedDifferentiator"
-                    name="statedDifferentiator"
-                    class="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-wba-deep focus:border-transparent"
-                    placeholder="e.g. uses brain science to build brands"
-                  />
-                </div>
-              </div>
+              <p class="text-sm text-gray-700 leading-relaxed">
+                We are the only
+                <input
+                  type="text"
+                  id="businessType"
+                  name="businessType"
+                  class="inline-block align-baseline border-0 border-b border-gray-400 px-1 pb-0.5 w-48 text-sm text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none focus:border-wba-deep focus:ring-0"
+                  placeholder="brand consultancy"
+                  style="font-size: inherit; font-family: inherit;"
+                />
+                that
+                <input
+                  type="text"
+                  id="statedDifferentiator"
+                  name="statedDifferentiator"
+                  class="inline-block align-baseline border-0 border-b border-gray-400 px-1 pb-0.5 w-56 text-sm text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none focus:border-wba-deep focus:ring-0"
+                  placeholder="uses brain science to build brands"
+                  style="font-size: inherit; font-family: inherit;"
+                />
+                .
+              </p>
             </div>
             <button
               type="submit"
